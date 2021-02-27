@@ -1,0 +1,113 @@
+import datetime as DT
+from math import pi
+
+
+def check_type(*args):
+    def function(func):
+        def wrapper(*param):
+            if isinstance(param[0], args[0]) \
+                    and isinstance(param[1], args[1]) \
+                    and isinstance(param[2], args[2]):
+                my_func = func(*param)
+                return my_func
+            else:
+                raise AttributeError
+
+        return wrapper
+
+    return function
+
+
+@check_type(int, str, float)
+def check_value(num_int: int, text: str, num_float: float):
+    return num_int + int(text) + num_float
+
+
+# print(check_value(10, '5', 0.5))
+
+def printer(func):
+    def wrapper(*args):
+        a = func(args[0], args[1])
+        print(a)
+        return func
+
+    return wrapper
+
+
+@printer
+def sum(num_1, num_2):
+    return num_1 + num_2
+
+
+@printer
+def sup(num_1, num_2):
+    return num_1 - num_2
+
+
+# sum(1, 2)
+# sup(1, 2)
+
+def timeit(func):
+    def wrapper(*args):
+        start = DT.datetime.now()
+        a = func(args[0])
+        print(DT.datetime.now() - start)
+        return func
+
+    return wrapper
+
+
+@timeit
+def gen_ls(max_size):
+    return [x for x in range(max_size)]
+
+
+# gen_ls(10 ** 6)
+
+class Circle:
+    PI = float(str(pi)[:4])
+
+    def __init__(self, radius: int):
+        self.radius = radius
+
+    def area(self):
+        return (self.radius * self.PI) ** 2
+
+    def circle_length(self):
+        return 2 * self.PI * self.radius
+
+
+class Sfere(Circle):
+    def __init__(self, radius):
+        Circle.__init__(self, radius)
+
+    def area(self):
+        return (4 / 3) * (super().PI * self.radius) ** 3
+
+
+# c = Sfere(5)
+# print(c.area())
+
+def reverse_word(text: str):
+    t = text[::-1].split()
+    return " ".join(t[::-1])
+
+
+print(reverse_word("Hello World !"))
+print(reverse_word("My name is Tigran"))
+print(reverse_word("What is your name ?"))
+
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+
+class Line:
+    def minus(p1: Point, p2: Point):
+        return ((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2) ** 1 / 2
+
+
+p1 = Point(3, 5)
+p2 = Point(5, 3)
+# print(Line.minus(p1, p2))
